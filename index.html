@@ -61,35 +61,10 @@
 </head>
 <body>
   <div class="glass-box">
-    <h1 class="neon"><i class="fas fa-bug"></i> Malzbug Login</h1>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
-    <div id="login-result" style="margin-top: 10px; text-align: center;"></div>
+    <h1 class="neon"><i class="fas fa-bug"></i> Malzbug Panel</h1>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <button><i class="fas fa-sign-in-alt"></i> Login</button>
   </div>
-
-  <script>
-    const VALID_USERS = [
-      { username: "malz", password: "bug123" },
-      { username: "admin", password: "apocalypse" }
-    ];
-
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
-      const result = document.getElementById("login-result");
-
-      const found = VALID_USERS.find(u => u.username === user && u.password === pass);
-
-      if (found) {
-        result.innerText = "✅ Login Berhasil!";
-        result.style.color = "lime";
-        // lanjut redirect atau tampilkan konten
-      } else {
-        result.innerText = "❌ Username atau Password salah!";
-        result.style.color = "crimson";
-      }
-    }
-  </script>
 </body>
 </html>
