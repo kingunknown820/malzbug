@@ -1,33 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Hacked By Malz</title>
+  <meta charset="UTF-8">
+  <title>Hacked by Malz</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
     body {
-      background-color: black;
+      margin: 0;
+      background-color: #000;
       color: red;
+      font-family: 'Share Tech Mono', monospace;
       text-align: center;
-      font-family: monospace;
+      animation: flicker 3s infinite;
     }
-    img {
-      width: 300px;
-      margin-top: 50px;
-    }
+
     h1 {
       font-size: 3em;
-      text-shadow: 0 0 10px red;
+      text-shadow: 0 0 10px red, 0 0 20px red;
+      margin-top: 100px;
     }
+
     p {
       font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    .glitch {
+      font-size: 2em;
+      position: relative;
+      color: red;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .glitch::before {
+      animation: glitchTop 1s infinite linear;
+      color: lime;
+      top: -2px;
+    }
+
+    .glitch::after {
+      animation: glitchBottom 1s infinite linear;
+      color: blue;
+      top: 2px;
+    }
+
+    @keyframes glitchTop {
+      0% { clip: rect(0, 9999px, 0, 0); }
+      5% { clip: rect(0, 9999px, 20px, 0); }
+      10% { clip: rect(0, 9999px, 0, 0); }
+      15% { clip: rect(0, 9999px, 30px, 0); }
+    }
+
+    @keyframes glitchBottom {
+      0% { clip: rect(0, 9999px, 0, 0); }
+      5% { clip: rect(10px, 9999px, 60px, 0); }
+      10% { clip: rect(0, 9999px, 0, 0); }
+      15% { clip: rect(5px, 9999px, 40px, 0); }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+      60% { opacity: 0.9; }
+      70% { opacity: 0.6; }
+      80% { opacity: 0.95; }
+    }
+
+    img {
+      margin-top: 30px;
+      width: 200px;
+      filter: drop-shadow(0 0 10px red);
     }
   </style>
 </head>
 <body>
+  <h1 class="glitch" data-text="HACKED BY MALZ">HACKED BY MALZ</h1>
+  <p>#CyberGhost ✘ <br> We are everywhere. We are nowhere. 💀</p>
   <img src="https://i.ibb.co/TvpygkV/skull.png" alt="Skull">
-  <h1>Hacked By Malz</h1>
-  <p>Your system has been pwned!<br>#TeamMalzWasHere<br>We Own The Night 🌙</p>
   <audio autoplay loop>
-    <source src="https://example.com/horror.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/xli93z.mp3" type="audio/mpeg">
   </audio>
 </body>
 </html>
