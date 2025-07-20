@@ -1,29 +1,63 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-  <title>Waifu Dormitory</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yua Mikami Waifu</title>
   <style>
-    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
-    .choice { margin: 10px; padding: 10px 20px; background: #333; border: none; color: white; cursor: pointer; }
-    .choice:hover { background: #555; }
+    body {
+      background: linear-gradient(to right, #111, #222);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .waifu-img {
+      width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+    }
+    .dialog-box {
+      background-color: #333;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      max-width: 80%;
+    }
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #ff85c1;
+    }
   </style>
 </head>
 <body>
-  <h1>Yumi: “Awak lambat lagi hari ni...”</h1>
-  <p>(Dia silang tangan, muka masam. Tapi pipi dia merah.)</p>
-  <button class="choice" onclick="response('maaf')">Maaf, Yumi. Aku tertidur tadi.</button>
-  <button class="choice" onclick="response('gurau')">Hehe... rindukan aku ke?</button>
-  <button class="choice" onclick="response('diam')">Diam la. Tak penting pun.</button>
+  <h1>Yua Mikami - Virtual Idol</h1>
+  <img src="https://i.imgur.com/ZHt9ykM.png" alt="Yua Mikami Anime Style" class="waifu-img" />
+  <div class="dialog-box" id="dialog">
+    Hai senpai 💖 Yua tunggu dari tadi~
+  </div>
+  <br />
+  <button onclick="talkToYua()">Cakap dengan Yua</button>  <script>
+    const dialogLines = [
+      "Eii~ Senpai nak tengok show malam ni? 😚",
+      "Jangan pandang lama-lama... nanti jatuh cinta 💕",
+      "Yua malu lah... tapi suka bila senpai tengok... 😳",
+      "Malam ni, kita berdua je, okay? 🥰",
+      "Kalau rindu, tekan je butang ni selalu~ 💋"
+    ];
 
-  <p id="result"></p>
-
-  <script>
-    function response(choice) {
-      let res = document.getElementById("result");
-      if (choice === "maaf") res.innerText = "Yumi: Hmph... okay la. Tapi jangan ulang lagi.";
-      else if (choice === "gurau") res.innerText = "Yumi: B-bodoh! Siapa rindu awak?! (Dia pandang lain.)";
-      else res.innerText = "Yumi: ...Aku benci kau!";
+    function talkToYua() {
+      const randomIndex = Math.floor(Math.random() * dialogLines.length);
+      document.getElementById("dialog").innerText = dialogLines[randomIndex];
     }
-  </script>
-</body>
+  </script></body>
 </html>
