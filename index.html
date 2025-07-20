@@ -6,76 +6,84 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: black;
+      background: black;
       color: red;
       font-family: 'Share Tech Mono', monospace;
       text-align: center;
-      margin: 0;
-      padding: 0;
-      background-image: url('https://i.ibb.co/VMJw2sq/rain.gif');
+      padding: 30px 10px;
+      background-image: url('https://i.ibb.co/VMJw2sq/rain.gif'); /* latar hujan */
       background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-top: 20px;
-      text-shadow: 0 0 10px red;
+      font-size: 3em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px red, 0 0 20px red;
     }
 
     h2 {
+      font-size: 1.5em;
       color: #ff0000;
-      font-size: 1.8em;
-      margin-bottom: 10px;
-    }
-
-    .thanks {
-      font-size: 0.9em;
-      color: #ccc;
       margin-bottom: 20px;
     }
 
-    .anime-img {
+    .img-box img {
       width: 220px;
-      border-radius: 10px;
-      margin: 20px auto;
+      border-radius: 12px;
       box-shadow: 0 0 20px red;
+      margin-bottom: 20px;
     }
 
     .quote {
-      font-size: 1em;
       max-width: 600px;
       margin: auto;
-      padding: 20px;
+      font-size: 1.1em;
+      line-height: 1.6;
       color: #ffcccc;
       text-shadow: 0 0 5px red;
+      margin-bottom: 30px;
+    }
+
+    .credit {
+      font-size: 0.9em;
+      color: #aaa;
+      margin-top: 10px;
     }
 
     audio {
-      margin-top: 10px;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
 
-  <img class="anime-img" src="https://i.ibb.co/zQh1s2S/killua-dark.jpg" alt="Killua">
-
-  <h1>Hacked By Malz</h1>
-  <h2>MALZ</h2>
-
-  <div class="thanks">
-    || THANKS TO : Allah SWT / Keluarga / Teman Setia / 127.0.0.1 ||
+  <div class="img-box">
+    <img src="https://i.ibb.co/zQh1s2S/killua-dark.jpg" alt="Killua">
   </div>
 
-  <p class="quote">
-    'Peretas adalah bakat, anda tidak dapat mempelajarinya di sekolah anda. Tapi, Jika anda dilahirkan untuk jadi seorang peretas, itu adalah takdir anda. Jika tidak, maka andalah yang kami retas.'
-  </p>
+  <h1>HACKED BY MALZ</h1>
+  <h2>#TEAM MALZ</h2>
+
+  <div class="quote">
+    'Peretas adalah bakat. Anda tidak dapat mempelajarinya di sekolah.
+    Tapi jika Anda dilahirkan untuk menjadi peretas, itu adalah takdir Anda.
+    Jika tidak, maka Anda lah yang akan kami retas.'
+  </div>
 
   <audio controls autoplay loop>
     <source src="https://files.catbox.moe/xli93z.mp3" type="audio/mpeg">
   </audio>
+
+  <div class="credit">
+    &copy; 2025 | MALZ CYBER SHADOW
+  </div>
 
 </body>
 </html>
