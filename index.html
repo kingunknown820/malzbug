@@ -1,87 +1,29 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Hacked by Malz</title>
+  <title>Waifu Dormitory</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: #000000;
-      color: red;
-      font-family: 'Share Tech Mono', monospace;
-      text-align: center;
-      padding: 30px 10px;
-    }
-
-    h1 {
-      font-size: 3em;
-      margin-bottom: 10px;
-      text-shadow: 0 0 10px red, 0 0 20px red;
-    }
-
-    h2 {
-      font-size: 1.5em;
-      color: #ff0000;
-      margin-bottom: 20px;
-    }
-
-    .img-box img {
-      width: 220px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px red;
-      margin-bottom: 20px;
-    }
-
-    .quote {
-      max-width: 600px;
-      margin: auto;
-      font-size: 1.1em;
-      line-height: 1.6;
-      color: #ffcccc;
-      text-shadow: 0 0 5px red;
-      margin-bottom: 30px;
-    }
-
-    .credit {
-      font-size: 0.9em;
-      color: #aaa;
-      margin-top: 10px;
-    }
-
-    audio {
-      margin: 20px 0;
-    }
+    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
+    .choice { margin: 10px; padding: 10px 20px; background: #333; border: none; color: white; cursor: pointer; }
+    .choice:hover { background: #555; }
   </style>
 </head>
 <body>
+  <h1>Yumi: “Awak lambat lagi hari ni...”</h1>
+  <p>(Dia silang tangan, muka masam. Tapi pipi dia merah.)</p>
+  <button class="choice" onclick="response('maaf')">Maaf, Yumi. Aku tertidur tadi.</button>
+  <button class="choice" onclick="response('gurau')">Hehe... rindukan aku ke?</button>
+  <button class="choice" onclick="response('diam')">Diam la. Tak penting pun.</button>
 
-  <div class="img-box">
-    <img src="https://files.catbox.moe/p73c9e.jpg" alt="Hacker Anime">
-  </div>
+  <p id="result"></p>
 
-  <h1>HACKED BY MALZ</h1>
-  <h2>#TEAM MALZ</h2>
-
-  <div class="quote">
-    'Peretas adalah bakat. Anda tidak dapat mempelajarinya di sekolah.<br>
-    Tapi jika Anda dilahirkan untuk menjadi peretas, itu adalah takdir Anda.<br>
-    Jika tidak, maka Anda lah yang akan kami retas.'
-  </div>
-
-  <audio controls autoplay loop>
-    <source src="https://files.catbox.moe/xli93z.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="credit">
-    &copy; 2025 | MALZ CYBER SHADOW
-  </div>
-
+  <script>
+    function response(choice) {
+      let res = document.getElementById("result");
+      if (choice === "maaf") res.innerText = "Yumi: Hmph... okay la. Tapi jangan ulang lagi.";
+      else if (choice === "gurau") res.innerText = "Yumi: B-bodoh! Siapa rindu awak?! (Dia pandang lain.)";
+      else res.innerText = "Yumi: ...Aku benci kau!";
+    }
+  </script>
 </body>
 </html>
