@@ -1,63 +1,64 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yua Mikami Waifu</title>
+  <meta charset="UTF-8">
+  <title>HACKED BY MALZ</title>
   <style>
     body {
-      background: linear-gradient(to right, #111, #222);
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: black;
+      color: #00FF00;
+      font-family: "Courier New", monospace;
+      overflow: hidden;
       text-align: center;
-      padding: 20px;
     }
-    .waifu-img {
-      width: 300px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+
+    h1 {
+      font-size: 48px;
+      animation: glitch 1s infinite;
+      margin-top: 20vh;
+      color: red;
     }
-    .dialog-box {
-      background-color: #333;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 15px;
-      display: inline-block;
-      max-width: 80%;
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px red; }
+      25% { text-shadow: -2px -2px lime; }
+      50% { text-shadow: 2px -2px blue; }
+      75% { text-shadow: -2px 2px yellow; }
+      100% { text-shadow: 2px 2px red; }
     }
-    button {
-      background-color: #ff69b4;
+
+    #typewriter {
+      font-size: 20px;
       color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 15px;
+      width: 80%;
+      margin: 30px auto;
+      border-right: 2px solid #00FF00;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 4s steps(40, end), blink .75s step-end infinite;
     }
-    button:hover {
-      background-color: #ff85c1;
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 80%; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #00FF00; }
     }
   </style>
 </head>
 <body>
-  <h1>Yua Mikami - Virtual Idol</h1>
-  <img src="https://i.imgur.com/ZHt9ykM.png" alt="Yua Mikami Anime Style" class="waifu-img" />
-  <div class="dialog-box" id="dialog">
-    Hai senpai 💖 Yua tunggu dari tadi~
-  </div>
-  <br />
-  <button onclick="talkToYua()">Cakap dengan Yua</button>  <script>
-    const dialogLines = [
-      "Eii~ Senpai nak tengok show malam ni? 😚",
-      "Jangan pandang lama-lama... nanti jatuh cinta 💕",
-      "Yua malu lah... tapi suka bila senpai tengok... 😳",
-      "Malam ni, kita berdua je, okay? 🥰",
-      "Kalau rindu, tekan je butang ni selalu~ 💋"
-    ];
+  <h1>HACKED BY MALZ</h1>
+  <div id="typewriter">This website has been penetrated by #TeamMalz.</div>
 
-    function talkToYua() {
-      const randomIndex = Math.floor(Math.random() * dialogLines.length);
-      document.getElementById("dialog").innerText = dialogLines[randomIndex];
-    }
-  </script></body>
+  <script>
+    alert("⚠️ This site has been HACKED by MALZ. You’ve been owned.");
+  </script>
+
+  <audio autoplay loop>
+    <source src="https://files.catbox.moe/xfnvq6.mp3" type="audio/mpeg">
+  </audio>
+</body>
 </html>
