@@ -4,21 +4,51 @@
   <meta charset="UTF-8">
   <title>HACKED BY MALZ</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       background: url('https://files.catbox.moe/p73c9e.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #00FF00;
       font-family: "Courier New", monospace;
-      overflow: hidden;
+      color: #00FF00;
       text-align: center;
     }
 
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      margin-top: 15vh;
+    }
+
     h1 {
-      font-size: 50px;
-      margin-top: 20vh;
+      font-size: 60px;
       color: red;
-      text-shadow: 0 0 20px yellow;
       animation: glitch 1s infinite;
+      text-shadow: 0 0 20px yellow;
+    }
+
+    #typewriter {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      width: 90%;
+      margin: 30px auto;
+      border-right: 2px solid #00FF00;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 4s steps(50, end), blink .75s step-end infinite;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 14px;
+      border-radius: 8px;
+      display: inline-block;
     }
 
     @keyframes glitch {
@@ -29,23 +59,9 @@
       100% { text-shadow: 2px 2px red; }
     }
 
-    #typewriter {
-      font-size: 20px;
-      color: white;
-      width: 80%;
-      margin: 30px auto;
-      border-right: 2px solid #00FF00;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: typing 4s steps(40, end), blink .75s step-end infinite;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      display: inline-block;
-    }
-
     @keyframes typing {
       from { width: 0; }
-      to { width: 80%; }
+      to { width: 90%; }
     }
 
     @keyframes blink {
@@ -55,11 +71,50 @@
   </style>
 </head>
 <body>
-  <h1>HACKED BY MALZ</h1>
-  <div id="typewriter">System has been taken over. #TeamMalz was here.</div>
+  <canvas id="matrixCanvas"></canvas>
+
+  <div class="content">
+    <h1>HACKED BY MALZ</h1>
+    <div id="typewriter">🔥 System has been taken over. #TeamMalz was here 🔥</div>
+  </div>
 
   <script>
     alert("⚠️ This site has been hacked by MALZ. You’ve been owned.");
+
+    // MATRIX EFFECT
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const katakana = "アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const chars = katakana.split("");
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      drops.forEach((y, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        ctx.fillText(text, x, y * fontSize);
+
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      });
+    }
+
+    setInterval(drawMatrix, 50);
   </script>
 
   <audio autoplay loop>
