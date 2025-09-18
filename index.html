@@ -218,17 +218,18 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
-const BIN_ID = "686253b98a456b7966b89878";
-const API_KEY = "$2a$10$nGcA/jmTjVr1ZWe7ZvnsxOpDpX6PG15SmepqlVOqcSAOGDwU62x8G";
-const headers = {
-  "Content-Type": "application/json",
-  "X-Master-Key": API_KEY
-};
+// GANTI link ini ke raw JSON dari repo GitHub kamu
+const GITHUB_USERS_URL = "https://raw.githubusercontent.com/kingunknown820/malzbug/main/users.json";
 
 async function getUsers() {
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
-  const data = await res.json();
-  return data.record;
+  try {
+    const res = await fetch(GITHUB_USERS_URL);
+    const data = await res.json();
+    return data.users;
+  } catch (err) {
+    console.error("Gagal ambil data users:", err);
+    return [];
+  }
 }
 
 function logout() {
@@ -308,6 +309,20 @@ async function sendBug() {
 
 try {
   const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
+  const json = await res.json();
+
+  showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
+} catch (err) {
+  resDiv.innerText = "❌ Gagal fetch: " + err;
+  resDiv.style.color = "crimson";
+}
+
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+}
+</script>
+</body>
+</html>?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
   const json = await res.json();
 
   showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
