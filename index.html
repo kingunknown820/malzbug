@@ -1,40 +1,374 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ms">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ApocalypseWeb</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NESTRO System — Demo</title>
+
+  <!-- Font (Google Fonts) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
   <style>
-    :root { --main: #ffffff; --second: #cccccc; --bg: #0e0e0e; --text: #eeeeee; }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
-    body {
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; display: flex;
-      justify-content: center; align-items: center;
-      padding: 20px; position: relative;
+    /* ---------- Variables ---------- */
+    :root{
+      --bg1: #03030a;
+      --bg2: #0b0312;
+      --neon: #2152ff;
+      --neon-2: #4b00ff;
+      --glass: rgba(255,255,255,0.03);
+      --card: rgba(255,255,255,0.02);
+      --text: rgba(200,220,255,0.94);
+      --muted: rgba(130,150,255,0.35);
+      --radius: 26px;
     }
-    #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
-    .glass-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 30px; backdrop-filter: blur(10px);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-      z-index: 2; max-width: 450px; width: 100%;
+
+    /* ---------- Basic reset ---------- */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100%;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(33,82,255,0.06), transparent 8%),
+                  radial-gradient(900px 600px at 90% 90%, rgba(75,0,255,0.05), transparent 6%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:22px;
     }
-    .profile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-    .profile img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--main); }
-    .profile-info h2 { font-size: 1.2rem; color: var(--main); }
-    .status { font-size: 0.9rem; color: #bbbbbb; }
-    .status i { color: #ffffff; margin-right: 5px; }
-    h1 { font-size: 1.4rem; color: var(--main); margin-bottom: 20px; text-align: center; animation: neon 2s infinite alternate; }
-    .neon {
-  color: #0ff;
-  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
-  animation: flicker 1.5s infinite alternate;
-}
+
+    /* ---------- particle / subtle nebula using pseudo-element ---------- */
+    .page {
+      position:relative;
+      max-width:900px;
+      margin:0 auto;
+      padding-bottom:80px;
+      overflow:hidden;
+    }
+    .page::before{
+      content:"";
+      position:absolute;
+      inset:-20% -10%;
+      background:
+        radial-gradient(400px 200px at 20% 10%, rgba(33,82,255,0.06), transparent 15%),
+        radial-gradient(300px 300px at 85% 70%, rgba(75,0,255,0.05), transparent 12%);
+      filter:blur(40px) saturate(120%);
+      pointer-events:none;
+      z-index:0;
+      animation: drift 18s linear infinite alternate;
+      opacity:0.9;
+    }
+    @keyframes drift{
+      from{transform:translateY(0) rotate(0deg)}
+      to{transform:translateY(-40px) rotate(6deg)}
+    }
+
+    /* ---------- Header ---------- */
+    header{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      padding-top:6px;
+      margin-bottom:18px;
+    }
+    .logo-wrap{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:center;
+    }
+    .logo {
+      width:72px;
+      height:72px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      display:inline-grid;
+      place-items:center;
+      box-shadow: 0 8px 30px rgba(33,82,255,0.12), inset 0 1px 0 rgba(255,255,255,0.02);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .logo img{ width:56px; height:56px; object-fit:cover; border-radius:8px; }
+
+    h1{
+      margin:0;
+      font-weight:800;
+      font-size:36px;
+      letter-spacing:1px;
+      color:var(--neon);
+      text-shadow: 0 6px 26px rgba(33,82,255,0.22), 0 0 14px rgba(75,0,255,0.08);
+    }
+    p.lead{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:500;
+    }
+
+    /* ---------- Card style ---------- */
+    .card {
+      position:relative;
+      z-index:2;
+      margin:22px 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:28px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 40px rgba(33,82,255,0.04);
+      overflow:hidden;
+    }
+    /* subtle inner glow ring */
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      box-shadow: inset 0 0 80px rgba(33,82,255,0.02);
+      pointer-events:none;
+    }
+
+    /* ---------- Login block ---------- */
+    .login-box{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+      text-align:center;
+    }
+    .login-box .hint{
+      color:var(--muted);
+      font-size:18px;
+      font-weight:600;
+    }
+    .btn-login{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      border:0;
+      cursor:pointer;
+      padding:14px 26px;
+      font-weight:700;
+      font-size:18px;
+      border-radius:14px;
+      background: linear-gradient(180deg,var(--neon),var(--neon-2));
+      color:white;
+      box-shadow: 0 8px 30px rgba(33,82,255,0.28), 0 2px 8px rgba(0,0,0,0.6), 0 0 18px rgba(75,0,255,0.12);
+      transform:translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease;
+      outline: none;
+    }
+    .btn-login:active{ transform:translateY(2px); }
+    .btn-login .icon {
+      width:22px; height:22px;
+      display:inline-grid; place-items:center;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5));
+    }
+
+    /* ---------- About section ---------- */
+    .about-title{
+      margin:6px 0 18px;
+      font-size:34px;
+      color:var(--neon);
+      text-shadow: 0 6px 20px rgba(33,82,255,0.18);
+      text-align:left;
+    }
+    .about-text{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:16px;
+      margin-bottom:18px;
+    }
+    .features{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px 18px;
+    }
+    .feature{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      color:var(--neon);
+      font-weight:600;
+      font-size:16px;
+    }
+    .feature .f-icon{
+      width:40px; height:40px;
+      display:grid; place-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.02);
+      box-shadow: 0 6px 18px rgba(33,82,255,0.05);
+      color:var(--neon);
+      font-size:18px;
+    }
+    .feature small{ display:block; font-weight:400; color:var(--muted); font-size:13px; margin-top:4px; }
+
+    /* ---------- Footer / spacing ---------- */
+    .spacer{height:12px}
+
+    /* ---------- responsive ---------- */
+    @media (max-width:720px){
+      h1{font-size:30px}
+      .about-title{font-size:28px}
+      .features{grid-template-columns:1fr}
+      .logo{width:62px;height:62px}
+      .logo img{width:48px;height:48px}
+      .card{padding:20px}
+      .btn-login{width:72%}
+    }
+  </style>
+</head>
+<body>
+  <div class="page" role="main">
+
+    <header>
+      <div class="logo-wrap" aria-hidden="false">
+        <!-- Placeholder logo: change src to your image -->
+        <div class="logo">
+          <img src="data:image/svg+xml;utf8,
+            <svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'>
+              <rect width='100%' height='100%' rx='12' fill='%230b0b12'/>
+              <g fill='%23dfe9ff' opacity='0.12'>
+                <circle cx='40' cy='30' r='28'/>
+                <rect x='24' y='68' width='72' height='28' rx='8'/>
+              </g>
+            </svg>"
+          alt="logo">
+        </div>
+
+        <div>
+          <h1>NESTRO System</h1>
+          <p class="lead">Dashboard — demo</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Login Card -->
+    <section class="card" aria-labelledby="login-heading">
+      <div class="login-box">
+        <div class="hint" id="login-heading">Ola!! Button to log in below</div>
+
+        <button class="btn-login" id="openLoginBtn" aria-haspopup="dialog">
+          <span class="icon" aria-hidden="true">
+            <!-- Crown icon SVG -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 7l4 4 4-6 4 6 4-4v10H3z" fill="white"/>
+            </svg>
+          </span>
+          Login
+        </button>
+
+        <small style="color:var(--muted)">Keamanan terjaga • Api Bug High-Perfomance</small>
+      </div>
+    </section>
+
+    <!-- About Card -->
+    <section class="card" aria-labelledby="about-title">
+      <h2 class="about-title" id="about-title">About NESTRO</h2>
+      <p class="about-text">
+        NESTRO WhatsAppシステムに損害を与えるために使用されるアプリケーションまたはウェブサイトです.
+        (Bahasa/Description placeholder — edit to suit.)
+      </p>
+
+      <div class="features" role="list">
+        <div class="feature" role="listitem">
+          <div class="f-icon" aria-hidden="true">🐞</div>
+          <div>
+            Bug Terkirim Dengan Cepat!!
+            <small>Laporkan & skip manual steps</small>
+          </div>
+        </div>
+
+        <div class="feature" role="listitem">
+          <div class="f-icon" aria-hidden="true">🔒</div>
+          <div>
+            Keamanan Terjaga
+            <small>Built-in safeguards</small>
+          </div>
+        </div>
+
+        <div class="feature" role="listitem">
+          <div class="f-icon" aria-hidden="true">⚡</div>
+          <div>
+            Api Bug High-Perfomance
+            <small>Throughput & low latency</small>
+          </div>
+        </div>
+
+        <div class="feature" role="listitem">
+          <div class="f-icon" aria-hidden="true">&lt;/&gt;</div>
+          <div>
+            Multiple Programming
+            <small>Polyglot-friendly</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Simple Login Modal (in-page) -->
+    <div id="modal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;">
+      <div style="position:fixed; inset:0; z-index:60; display:grid; place-items:center;">
+        <div style="position:absolute; inset:0; background:rgba(2,2,6,0.6);" id="modal-overlay"></div>
+
+        <div style="width:92%; max-width:420px; border-radius:18px; padding:18px; background:linear-gradient(180deg, rgba(10,10,16,0.95), rgba(4,4,12,0.95)); border:1px solid rgba(255,255,255,0.03); box-shadow:0 20px 60px rgba(0,0,0,0.7); z-index:70;">
+          <h3 style="margin:6px 0 8px; color:var(--neon);">Login</h3>
+          <p style="margin:0 0 12px; color:var(--muted);">Masukkan username & password (demo)</p>
+
+          <form id="loginForm" style="display:flex; flex-direction:column; gap:10px;">
+            <input name="user" placeholder="Username" required style="padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); color:var(--text); outline:none;" />
+            <input name="pass" placeholder="Password" type="password" required style="padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); color:var(--text); outline:none;" />
+            <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:6px;">
+              <button type="button" id="cancelBtn" style="padding:10px 14px; border-radius:10px; border:0; background:transparent; color:var(--muted);">Batal</button>
+              <button type="submit" style="padding:10px 16px; border-radius:10px; border:0; background:linear-gradient(90deg,var(--neon),var(--neon-2)); color:white;">Log masuk</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---------- Basic interactive behavior ----------
+    const openBtn = document.getElementById('openLoginBtn');
+    const modal = document.getElementById('modal');
+    const overlay = document.getElementById('modal-overlay');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const form = document.getElementById('loginForm');
+
+    function openModal(){
+      modal.style.display = 'block';
+      modal.setAttribute('aria-hidden','false');
+      // focus first input
+      setTimeout(()=> modal.querySelector('input')?.focus(), 60);
+    }
+    function closeModal(){
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    openBtn.addEventListener('click', openModal);
+    cancelBtn.addEventListener('click', closeModal);
+    overlay && overlay.addEventListener('click', closeModal);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const user = fd.get('user');
+      // NOTE: This is demo-only. Replace with real auth call.
+      alert('Demo login: ' + user + '\\n(This is a static demo — implement real auth on server.)');
+      closeModal();
+    });
+
+    // Accessibility: close with Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+        </html>}
 
 @keyframes flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
