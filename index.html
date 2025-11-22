@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn.Kryz-Net v3 (Standalone)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel (to handle JSX in the browser) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar for that "Hacker" feel */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .font-mono { font-family: 'Courier New', Courier, monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- ICONS (Inline SVGs to avoid external dependency issues) ---
+        const Icons = {
+            Shield: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+            Database: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>,
+            Terminal: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>,
+            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+            Code: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+            Folder: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>,
+            ShoppingCart: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>,
+            Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+            Unlock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>,
+            AlertTriangle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+            CheckCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+            Search: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+            DollarSign: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        };
+
+        // --- CONSTANTS & DATA ---
+        const TABS = [
+            { id: 'sqli', label: 'SQL Injection', icon: Icons.Database, color: 'text-blue-400', bg: 'bg-blue-500/10' },
+            { id: 'xss', label: 'Reflected XSS', icon: Icons.Code, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+            { id: 'idor', label: 'Broken Access', icon: Icons.User, color: 'text-orange-400', bg: 'bg-orange-500/10' },
+            { id: 'cmd', label: 'Cmd Injection', icon: Icons.Terminal, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+            { id: 'lfi', label: 'Path Traversal', icon: Icons.Folder, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+            { id: 'logic', label: 'Logic Flaw', icon: Icons.ShoppingCart, color: 'text-pink-400', bg: 'bg-pink-500/10' },
+        ];
+
+        const SERVER_FILES = {
+            '/var/www/html/images/cat.jpg': '[BINARY IMAGE DATA]',
+            '/var/www/html/images/dog.jpg': '[BINARY IMAGE DATA]',
+            '/var/www/html/about.html': '<h1>About Us</h1>',
+            '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000::/home/user:/bin/sh',
+            '/etc/shadow': 'root:$6$sensitive_hash_data_FLAG{PATH_TRAVERSAL_MASTER}:18000:0:99999:7:::'
+        };
+
+        const STORE_ITEMS = [
+            { id: 1, name: 'Wooden Shield', price: 50 },
+            { id: 2, name: 'Iron Sword', price: 200 },
+            { id: 3, name: 'The Golden Flag', price: 9999 } 
+        ];
+
+        // --- SHARED COMPONENTS ---
+        const MissionHeader = ({ title, desc, hint, isComplete }) => (
+            <div className={`p-5 rounded-xl border transition-all ${isComplete ? 'bg-emerald-900/20 border-emerald-500/50' : 'bg-slate-800 border-slate-700'}`}>
+                <div className="flex justify-between items-start gap-4">
+                    <div>
+                        <h2 className={`text-lg font-bold flex items-center gap-2 ${isComplete ? 'text-emerald-400' : 'text-white'}`}>
+                            {isComplete && <span className="w-5 h-5 text-emerald-500"><Icons.CheckCircle /></span>}
+                            {title}
+                        </h2>
+                        <p className="text-slate-400 text-sm mt-1">{desc}</p>
+                    </div>
+                    {!isComplete && (
+                        <div className="hidden sm:block text-xs bg-slate-900 p-2 rounded border border-slate-800 text-slate-500 min-w-[120px]">
+                            <span className="font-bold text-slate-400 block mb-1">HINT:</span> {hint}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+
+        const ModeToggle = ({ mode, setMode }) => (
+            <div className="inline-flex bg-slate-900 p-1 rounded-lg border border-slate-800">
+                <button onClick={() => setMode('vulnerable')} className={`px-4 py-1.5 rounded text-xs font-bold uppercase transition-all ${mode === 'vulnerable' ? 'bg-red-500 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>Vulnerable</button>
+                <button onClick={() => setMode('secure')} className={`px-4 py-1.5 rounded text-xs font-bold uppercase transition-all ${mode === 'secure' ? 'bg-emerald-500 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>Secure</button>
+            </div>
+        );
+
+        const SourceCodeView = ({ type }) => {
+            const codes = {
+                sqli: `// VULNERABLE:
+const query = "SELECT * FROM users WHERE user = '" + user + "'";
+// Attack: user = "admin' OR '1'='1"
+
+// SECURE:
+const query = "SELECT * FROM users WHERE user = ?"; // Prepared Statement`,
+                
+                xss: `// VULNERABLE (React dangerouslySetInnerHTML):
+<div dangerouslySetInnerHTML={{ __html: userInput }} />
+
+// SECURE (Default React behavior):
+<div>{userInput}</div>`,
+                
+                idor: `// VULNERABLE:
+// No ownership check
+app.get('/doc/:id', (req, res) => db.getDoc(req.params.id));
+
+// SECURE:
+app.get('/doc/:id', (req, res) => {
+  const doc = db.getDoc(req.params.id);
+  if (doc.ownerId !== req.user.id) throw 403;
+  return doc;
+});`,
+
+                cmd: `// VULNERABLE:
+exec("ping " + ipAddress); 
+// Attack: 1.1.1.1; cat /etc/passwd
+
+// SECURE:
+if (!isIP(ipAddress)) throw Error;
+execFile("ping", [ipAddress]);`,
+
+                lfi: `// VULNERABLE:
+const path = "/var/www/" + req.query.file;
+// Attack: ?file=../../etc/passwd
+
+// SECURE:
+const filename = path.basename(req.query.file);
+if (!allowedFiles.includes(filename)) throw Error;`,
+
+                logic: `// VULNERABLE:
+wallet -= price * quantity;
+// Attack: quantity = -10 (Adds money!)
+
+// SECURE:
+if (quantity <= 0) throw Error("Invalid Quantity");`
+            };
+            return <code className="text-blue-300 font-mono whitespace-pre text-xs block">{codes[type]}</code>;
+        };
+
+        // --- MODULES ---
+
+        // 1. SQL INJECTION
+        const SQLInjectionModule = ({ onComplete }) => {
+            const [mode, setMode] = useState('vulnerable');
+            const [username, setUsername] = useState('');
+            const [status, setStatus] = useState(null);
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                const input = username.toLowerCase();
+                setTimeout(() => {
+                    if (mode === 'secure') {
+                        if (username === 'admin') setStatus({ type: 'error', msg: 'Password required for user "admin".' });
+                        else setStatus({ type: 'error', msg: 'User not found.' });
+                    } else {
+                        if (input.includes("' or '1'='1") || input.includes("' or 1=1")) {
+                            setStatus({ type: 'success', msg: 'Bypassed! Welcome, Admin.' });
+                            onComplete();
+                        } else if (username === 'admin') {
+                            setStatus({ type: 'error', msg: 'Password incorrect.' });
+                        } else {
+                            setStatus({ type: 'error', msg: 'User not found.' });
+                        }
+                    }
+                }, 300);
+            };
+
+            return (
+                <div className="space-y-8 max-w-2xl mx-auto">
+                    <MissionHeader title="Bypass Authentication" desc="Login as 'admin' without password." hint="admin' OR '1'='1" isComplete={status?.type === 'success'} />
+                    <div className="flex justify-end"><ModeToggle mode={mode} setMode={setMode} /></div>
+                    <div className="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-xl">
+                        <h3 className="text-xl font-bold text-white text-center mb-6 flex items-center justify-center gap-2"><span className="w-6 h-6"><Icons.Lock/></span> Admin Portal</h3>
+                        <form onSubmit={handleLogin} className="space-y-4">
+                            <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white outline-none focus:border-blue-500" placeholder="Username" />
+                            <input type="password" disabled className="w-full bg-slate-900/50 border border-slate-800 rounded p-3 text-slate-600 cursor-not-allowed" placeholder="[LOCKED]" />
+                            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition-colors">Login</button>
+                        </form>
+                        {status && <div className={`mt-4 p-4 rounded font-bold ${status.type === 'success' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-red-900/50 text-red-400'}`}>{status.msg}</div>}
+                    </div>
+                </div>
+            );
+        };
+
+        // 2. XSS MODULE
+        const XSSModule = ({ onComplete }) => {
+            const [mode, setMode] = useState('vulnerable');
+            const [input, setInput] = useState('');
+            const [posts, setPosts] = useState([{ id: 1, content: 'Welcome!', author: 'Admin' }]);
+
+            const handlePost = (e) => {
+                e.preventDefault();
+                if (!input) return;
+                if (mode === 'vulnerable' && (input.includes('<script>') || input.includes('onerror'))) {
+                    onComplete();
+                    alert("XSS SIMULATION: Script Executed!");
+                }
+                setPosts([{ id: Date.now(), content: input, author: 'Guest' }, ...posts]);
+                setInput('');
+            };
+
+            return (
+                <div className="space-y-6">
+                    <MissionHeader title="Inject JavaScript" desc="Make the browser execute code." hint="<img src=x onerror=alert(1)>" isComplete={false} />
+                    <div className="flex justify-end"><ModeToggle mode={mode} setMode={setMode} /></div>
+                    <div className="bg-white text-slate-900 rounded-xl overflow-hidden border border-slate-300 min-h-[300px]">
+                        <div className="bg-purple-600 p-4 text-white font-bold">Guestbook</div>
+                        <div className="p-6 space-y-6">
+                            <form onSubmit={handlePost} className="flex gap-2">
+                                <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Message..." className="flex-1 border rounded px-4 py-2 outline-none focus:border-purple-500" />
+                                <button className="bg-purple-600 text-white px-6 rounded">Post</button>
+                            </form>
+                            <div className="space-y-4">
+                                {posts.map(post => (
+                                    <div key={post.id} className="bg-gray-50 p-4 rounded border border-gray-200">
+                                        <div className="text-xs font-bold text-purple-600 mb-1">{post.author}:</div>
+                                        {mode === 'vulnerable' ? <div dangerouslySetInnerHTML={{ __html: post.content }} /> : <div>{post.content}</div>}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 3. IDOR MODULE
+        const IDORModule = ({ onComplete }) => {
+            const [mode, setMode] = useState('vulnerable');
+            const [docId, setDocId] = useState(100);
+            const [content, setContent] = useState(null);
+
+            useEffect(() => {
+                if (mode === 'secure' && docId !== 100) {
+                    setContent({ error: "403 Forbidden" });
+                } else if (docId === 101) {
+                    setContent({ title: "Confidential", body: "FLAG{IDOR_FOUND}", sensitive: true });
+                    if (mode === 'vulnerable') onComplete();
+                } else if (docId === 100) {
+                    setContent({ title: "Public Note", body: "Buy milk." });
+                } else {
+                    setContent({ error: "404 Not Found" });
+                }
+            }, [docId, mode]);
+
+            return (
+                <div className="space-y-6">
+                    <MissionHeader title="Access Private Docs" desc="Find document #101." hint="Change ID in URL." isComplete={content?.sensitive} />
+                    <div className="flex justify-end"><ModeToggle mode={mode} setMode={setMode} /></div>
+                    <div className="bg-slate-900 border border-slate-700 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-6 bg-black p-2 rounded border border-slate-800 font-mono text-sm text-slate-400">
+                            <span className="text-green-500">GET</span><span>/api/docs/</span>
+                            <input type="number" value={docId} onChange={(e) => setDocId(parseInt(e.target.value) || 0)} className="bg-transparent text-white w-16 outline-none border-b border-slate-600 text-center" />
+                        </div>
+                        <div className="bg-white text-slate-900 p-8 rounded shadow-lg h-48">
+                            {content?.error ? <div className="text-red-600 font-bold flex items-center gap-2"><span className="w-5 h-5"><Icons.AlertTriangle/></span> {content.error}</div> : content ? <>
+                                <h1 className="text-2xl font-bold mb-2">{content.title}</h1>
+                                <p>{content.body}</p>
+                                {content.sensitive && <div className="mt-4 p-2 bg-yellow-100 text-yellow-800 text-xs font-bold border border-yellow-300 text-center">TOP SECRET</div>}
+                            </> : null}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 4. COMMAND INJECTION
+        const CmdModule = ({ onComplete }) => {
+            const [mode, setMode] = useState('vulnerable');
+            const [cmd, setCmd] = useState('');
+            const [output, setOutput] = useState([]);
+
+            const runCmd = (e) => {
+                e.preventDefault();
+                let res = [`$ ping -c 1 ${cmd}`];
+                if (mode === 'secure') {
+                    if (/^[0-9.]+$/.test(cmd)) res.push(`PING ${cmd} (Success)...`);
+                    else res.push('Error: Invalid IP.');
+                } else {
+                    if (cmd.includes(';')) {
+                        const [ip, inj] = cmd.split(';');
+                        res.push(`PING ${ip} (Success)...`);
+                        res.push(`Executing: ${inj.trim()}`);
+                        if (inj.trim() === 'ls') res.push('index.html\nsecrets.txt');
+                        else if (inj.trim().startsWith('cat secrets.txt')) {
+                            res.push('FLAG{CMD_INJECTION_KING}');
+                            onComplete();
+                        } else res.push(`sh: ${inj.trim()}: not found`);
+                    } else res.push(`PING ${cmd} (Success)...`);
+                }
+                setOutput(res);
+            };
+
+            return (
+                <div className="space-y-6">
+                    <MissionHeader title="RCE" desc="Read secrets.txt." hint="127.0.0.1; cat secrets.txt" isComplete={output.some(l => l.includes('FLAG'))} />
+                    <div className="flex justify-end"><ModeToggle mode={mode} setMode={setMode} /></div>
+                    <div className="bg-black rounded-lg p-4 font-mono text-sm h-64 border border-slate-800 flex flex-col">
+                        <div className="fle
