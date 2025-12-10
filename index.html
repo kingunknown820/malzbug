@@ -273,41 +273,188 @@ if (quantity <= 0) throw Error("Invalid Quantity");`
                                 {content.sensitive && <div className="mt-4 p-2 bg-yellow-100 text-yellow-800 text-xs font-bold border border-yellow-300 text-center">TOP SECRET</div>}
                             </> : null}
                         </div>
-                    </div>
-                </div>
-            );
-        };
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>X7i - Login & Unban WhatsApp</title>
 
-        // 4. COMMAND INJECTION
-        const CmdModule = ({ onComplete }) => {
-            const [mode, setMode] = useState('vulnerable');
-            const [cmd, setCmd] = useState('');
-            const [output, setOutput] = useState([]);
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-            const runCmd = (e) => {
-                e.preventDefault();
-                let res = [`$ ping -c 1 ${cmd}`];
-                if (mode === 'secure') {
-                    if (/^[0-9.]+$/.test(cmd)) res.push(`PING ${cmd} (Success)...`);
-                    else res.push('Error: Invalid IP.');
-                } else {
-                    if (cmd.includes(';')) {
-                        const [ip, inj] = cmd.split(';');
-                        res.push(`PING ${ip} (Success)...`);
-                        res.push(`Executing: ${inj.trim()}`);
-                        if (inj.trim() === 'ls') res.push('index.html\nsecrets.txt');
-                        else if (inj.trim().startsWith('cat secrets.txt')) {
-                            res.push('FLAG{CMD_INJECTION_KING}');
-                            onComplete();
-                        } else res.push(`sh: ${inj.trim()}: not found`);
-                    } else res.push(`PING ${cmd} (Success)...`);
-                }
-                setOutput(res);
-            };
+<style>
+body { background:black; font-family:'Poppins',sans-serif; color:#fff; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+#particles { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
 
-            return (
-                <div className="space-y-6">
-                    <MissionHeader title="RCE" desc="Read secrets.txt." hint="127.0.0.1; cat secrets.txt" isComplete={output.some(l => l.includes('FLAG'))} />
-                    <div className="flex justify-end"><ModeToggle mode={mode} setMode={setMode} /></div>
-                    <div className="bg-black rounded-lg p-4 font-mono text-sm h-64 border border-slate-800 flex flex-col">
-                        <div className="fle
+.container {
+  position:relative; z-index:2;
+  background: rgba(43,48,226,0.05);
+  border:1px solid rgba(43,66,226,0.2);
+  backdrop-filter: blur(8px);
+  padding:40px 30px; border-radius:20px;
+  max-width:450px; width:90%;
+  box-shadow:0 0 25px rgba(60,43,230,0.3);
+}
+
+.logo-container { text-align:center; margin-bottom:20px; }
+.logo { width:100px; filter:drop-shadow(0 0 30px #2B30E2); margin-bottom:20px; }
+.title { font-size:32px; color:#1B47F1; text-shadow:0 0 10px #0917D7; font-weight:800; letter-spacing:1px;}
+.subtitle { font-size:14px; color:#B3C0FF; margin-bottom:30px; }
+
+.form-group { position:relative; margin-bottom:20px; }
+.form-group i { position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#2B51E2; font-size:16px; }
+.form-control { width:100%; padding:14px 14px 14px 45px; border-radius:10px; border:none; background: rgba(60,43,226,0.1); color:white; font-size:14px; border:1px solid rgba(49,43,226,0.3); }
+.form-control:focus { outline:none; border-color:#1C2DE8; box-shadow:0 0 10px rgba(46,43,226,0.3); }
+.form-control::placeholder { color:#192FE2; }
+
+.btn-login, .btn-send { width:100%; padding:14px; font-size:16px; font-weight:600; border:none; border-radius:10px; cursor:pointer; margin-top:10px; font-family:'Poppins',sans-serif; transition:all 0.3s ease;}
+.btn-login { background: linear-gradient(135deg, #352BE2, #0A0082); color:white; }
+.btn-login:hover { background:#2118D7; transform:translateY(-2px); box-shadow:0 8px 16px rgba(43,59,226,0.4);}
+.btn-send { background: linear-gradient(135deg,#ff73f8,#b85cff); color:#1a001f; box-shadow:0 0 15px #ff4df5; }
+.btn-send:hover { transform: scale(1.03); }
+
+#unbanForm { display:none; margin-top:20px; }
+label { display:block; margin:14px 0 5px; font-size:14px; color:#e8d8ff; }
+select, input { width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.3); background:rgba(0,0,0,0.4); color:#fff; font-size:15px; outline:none; }
+
+.notification {
+  position: fixed; top: 20px; right:20px; padding:15px 20px; border-radius:8px; background: rgba(0,21,120,0.9);
+  border:1px solid #402BE2; color:white; z-index:1000; box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  transform:translateX(100vw); transition: transform 0.3s ease; display:flex; align-items:center; gap:10px;
+}
+.notification.show { transform:translateX(0);}
+.notification.error { background: rgba(120,0,0,0.9); border-color:#ff4444;}
+.notification.success { background: rgba(0,100,0,0.9); border-color:#44ff44;}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+
+<div class="container">
+  <div class="logo-container">
+    <img src="https://files.catbox.moe/nv8rrj.jpg" alt="Logo" class="logo">
+    <div class="title">X7i - System</div>
+    <div class="subtitle">Welcome To Website X7i</div>
+  </div>
+
+  <!-- Login Form -->
+  <form id="loginForm">
+    <div class="form-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="username" class="form-control" placeholder="Username" required>
+    </div>
+    <div class="form-group">
+      <i class="fas fa-key"></i>
+      <input type="password" id="password" class="form-control" placeholder="Password" required>
+    </div>
+    <button type="submit" class="btn-login"><i class="fas fa-lock"></i> LOGIN NOW</button>
+  </form>
+
+  <!-- Form Unban WhatsApp -->
+  <div id="unbanForm">
+    <h2 style="text-align:center;color:#ff8cff;margin-top:20px;">UNBAN WHATSAPP</h2>
+    <label>Nama Lengkap Anda</label>
+    <input id="nama" placeholder="Masukkan nama lengkap anda">
+    <label>Nomor WhatsApp</label>
+    <input id="nomor" placeholder="+60xxxxxxxxx">
+    <label>Pilih Opsi Banding</label>
+    <select id="opsi">
+      <option value="Permanent">Permanen</option>
+      <option value="Spam">Spam</option>
+    </select>
+    <button class="btn-send" onclick="kirim()">Kirim Permintaan Unban</button>
+  </div>
+</div>
+
+<div id="notification" class="notification"><i class="fas fa-info-circle"></i> <span id="notification-text"></span></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jnicol/particleground/jquery.particleground.min.js"></script>
+<script>
+// Particles
+document.addEventListener('DOMContentLoaded', function () {
+  particleground(document.getElementById('particles'), {
+    dotColor: '#1E90FF',
+    lineColor: '#283EE7',
+    minSpeedX: 0.1, maxSpeedX: 0.3, minSpeedY: 0.1, maxSpeedY: 0.3,
+    density: 10000, particleRadius: 3
+  });
+});
+
+// Toast Notification
+function showNotification(message,type="info"){
+  const notification=document.getElementById("notification");
+  const notificationText=document.getElementById("notification-text");
+  notificationText.textContent=message;
+  notification.className="notification show";
+  if(type==="error"){ notification.classList.add("error"); notification.innerHTML=`<i class="fas fa-exclamation-circle"></i> <span id="notification-text">${message}</span>`;}
+  else if(type==="success"){ notification.classList.add("success"); notification.innerHTML=`<i class="fas fa-check-circle"></i> <span id="notification-text">${message}</span>`;}
+  setTimeout(()=>{notification.classList.remove("show");},5000);
+}
+
+// Login menggunakan users.json
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  fetch('users.json')
+    .then(res=>res.json())
+    .then(users=>{
+      const user = users.find(u=>u.username===username && u.password===password);
+      if(user){
+        this.style.display="none";
+        document.getElementById("unbanForm").style.display="block";
+        showNotification("Login berhasil!", "success");
+      }else{
+        showNotification("Username atau password salah", "error");
+      }
+    }).catch(err=>{console.error(err); showNotification("Gagal memuat users.json", "error");});
+});
+
+// Kirim email unban
+function kirim(){
+  let nama=document.getElementById("nama").value;
+  let nomor=document.getElementById("nomor").value;
+  let opsi=document.getElementById("opsi").value;
+  if(!nama || !nomor){ showNotification("Isi semua field!", "error"); return;}
+
+  let subject=encodeURIComponent("Permohonan Unban Akun WhatsApp");
+  let bodyText="";
+  if(opsi==="Permanent"){
+    bodyText=`Halo Tim WhatsApp,
+
+Saya ingin mengajukan banding atas pemblokiran permanen terhadap akun WhatsApp saya dengan nomor: ${nomor}. Saya yakin bahwa pemblokiran ini terjadi karena kesalahpahaman atau sistem yang salah mendeteksi aktivitas akun saya.
+
+Saya menggunakan akun ini hanya untuk berkomunikasi dengan keluarga, teman, dan keperluan pribadi/bisnis kecil. Saya selalu berusaha mengikuti Ketentuan Layanan dan Kebijakan WhatsApp.
+
+Mohon untuk meninjau kembali kasus saya dan mempertimbangkan untuk mengaktifkan kembali akun tersebut. Terima kasih atas perhatian dan kerja samanya. Saya sangat berharap akun saya bisa dipulihkan.
+
+Hormat saya,
+${nama}
+Nomor WhatsApp: ${nomor}`;
+  }else{
+    bodyText=`Kepada Tim Support WhatsApp,
+
+Nama saya ${nama}, dan saya ingin mengajukan permohonan unban untuk akun WhatsApp saya.
+
+Nomor WhatsApp: ${nomor}
+
+Akun saya baru-baru ini diblokir karena Spam.
+
+Saya memohon agar akun saya dapat dipulihkan, karena akun ini sangat penting bagi komunikasi pribadi dan pekerjaan saya. Saya berjanji untuk mematuhi semua kebijakan dan panduan penggunaan WhatsApp di masa mendatang.
+
+Terima kasih atas perhatian dan bantuan Anda.
+
+Hormat saya,
+${nama}
+${nomor}`;
+  }
+  window.location.href=`mailto:support@support.whatsapp.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+  showNotification("Email siap dikirim melalui client email Anda.", "success");
+}
+</script>
+</body>
+</html>
